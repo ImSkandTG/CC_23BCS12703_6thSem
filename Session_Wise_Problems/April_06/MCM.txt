@@ -1,0 +1,20 @@
+#define vi vector<int>
+#define vvi vector<vi>
+class Solution {
+  public:
+    int matrixMultiplication(vector<int> &arr) {
+        // code here
+        int n = arr.size();
+        vvi dp(n, vi(n, INT_MAX));
+        for (int i=0;i<n;i++) dp[i][i] = 0;
+        for (int i=2;i<n;i++) {// Number of matrices to multiply
+            for (int b=1;b<n-i+1;b++) { // Beginning points
+                int e = b+i-1; // Ending point
+                for (int k=b;k<e;k++) {
+                    dp[b][e] = min(dp[b][k] + dp[k+1][e] + arr[b-1] * arr[k] * arr[e], dp[b][e]);
+                }
+            }
+        }
+        return dp[1][n-1];
+    }
+};

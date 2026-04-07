@@ -1,0 +1,27 @@
+#define vi vector<int>
+#define vvi vector<vi>
+class Solution {
+  public:
+    int solve(vvi &cost, int bit, int parent, vvi& memo) {
+        if (bit==((1<<cost.size())-1)) return cost[parent][0];
+        if (memo[parent][bit]!=-1) return memo[parent][bit];
+        int mn = INT_MAX;
+        for (int i=1;i<cost.size();i++) {
+            if (i==parent) continue;
+            if (!((bit>>i)&1)) {
+                bit|=(1<<i);
+                mn = min(cost[parent][i] + solve(cost, bit, i, memo), mn);
+                bit^=(1<<i);
+            }
+        }
+        return memo[parent][bit] = mn;
+        
+    }
+    int tsp(vector<vector<int>>& cost) {
+        // code here
+        int n = cost.size();
+        int bit = 1;
+        vvi memo(n , vi((1<<n), -1));
+        return solve(cost, bit, 0, memo);
+    }
+};
